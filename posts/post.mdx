@@ -1,22 +1,66 @@
 ---
 type: Post
-title: Post Title
-description: Post description goes here
+title: DNS Overview
+description: ''
 date: '2025-02-03'
 ---
-### On-Premise GPO
+### Process
 
-*`GPO's works close with Regedit, whenever updates are made you need to apply them by command gpupdate /force. on each server`*
+1.  **Browser Cache:** First, your browser checks its cache to see if it already has the translation.
 
-*   **Computer Configuration:** Applies to computers where the GPO is applied, regardless of which user logs into the computer.
+2.  **DNS Recursor (Resolver):** If the information is not in the cache, the browser sends a query to the DNS resolver (typically your ISP or a custom resolver).
 
-    *   **Example:** Windows update, Firewall, Password policy, lock screen timeout
+3.  **Root Server:** If the resolver does not have the IP address, it forwards the query to the root server.
 
-*   **User Configuration:** Applies to users where the GPO is applied, regardless of which computer the user logs into.
+4.  **TLD Server:** The root server directs the resolver to the TLD server (e.g., for .com or .nl).
 
-    *   **Example:** Wallpaper, Application availability, Start menu settings
+5.  **Authoritative Name Server:** If the TLD server does not have the IP address, the query is forwarded to the authoritative name server, which has the final answer.
 
-### Additional notes
+6.  **Return:** The authoritative name server sends the IP address back to the resolver(NS Record), which then passes it to your browser and caches the information for future use.
 
-*   [Group Policy Administrative Templates](https://admx.help/)
+### DNS Records
+
+*   **A Record:** Resolves domain names to IPv4 addresses.
+
+*   **CNAME Record:** Directs a domain or subdomain to another domain name),
+
+*   **AAAA Record:** Resolves domain names to IPv6 addresses.
+
+*   **MX Record:** Directs emails to the mail server for your domain. It can also be you to load balance by adjusting TTL
+
+*   **SOA Record**: Stores administrative information about a DNS zone, including the primary name server and the domain administrator's email address.
+
+*   **NS Record:** Points to the authoritative name servers for a domain. Provided by the TLD server if the resolver does not already have the answer.
+
+*   **PTR Record:** Resolves IP addresses to domain names (reverse DNS lookup), commonly used to verify the authenticity of an email server.
+
+*   **TXT Record:** Holds text information related to a domain, used for domain verification and email security.
+
+*   **SPF Record:** Specifies which mail servers are authorized to send emails on behalf of your domain, helping to prevent email spoofing.
+
+*   **DKIM Record:** Adds a digital signature to your emails, allowing the receiving mail server to verify that the email was sent from your domain and hasn’t been altered in transit.
+
+*   **DMARC:** It works alongside DKIM and SPF, DMARC allows domain owners to specify a policy in DNS about how emails that fail DKIM or SPF checks should be treated. DMARC works as an additional layer of protection by enforcing policies and ensuring that only legitimate, authenticated emails make it to the recipient's inbox.
+
+### DNS Servers
+
+*   **Name Server:** Holds all DNS records for a domain.
+
+*   **DNS Recursor (Resolver):** Receives DNS requests and searches for answers.
+
+### DNS Server Types
+
+*   **Root Server:** The highest level in the DNS hierarchy. Points to TLD server.
+
+*   **TLD Server:** Manages top-level domains like .com or .nl.
+
+*   **Authoritative Name Server:** Manages the official DNS records for a specific domain.
+
+### Additional Notes
+
+*   Computers read domain names from right to left.
+
+*   After top-level domains like .com or .nl, there is always an invisible dot (the root domain).
+
+*   Computers and Windows cache DNS data once found to speed up requests.
 
