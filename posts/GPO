@@ -1,0 +1,10 @@
+### On-Premise GPO
+*GPO's works close with Regedit, whenever updates are made you need to apply them by command `gpupdate /force`. on each server*
+
+- **Computer Configuration:** Applies to computers where the GPO is applied, regardless of which user logs into the computer.
+	- **Example:** Windows update, Firewall, Password policy, lock screen timeout 
+- **User Configuration:** Applies to users where the GPO is applied, regardless of which computer the user logs into.
+	- **Example:** Wallpaper, Application availability, Start menu settings
+
+### Additional notes
+- [Group Policy Administrative Templates](https://admx.help/)
